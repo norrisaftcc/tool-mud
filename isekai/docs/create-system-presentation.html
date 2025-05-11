@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Forge: CREATE System Tutorial</title>
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-purple: #9900ff;
+            --neon-green: #00ff00;
+            --neon-orange: #ff9900;
+            --dark-bg: #0a0a15;
+            --grid-bg: #080815;
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Courier New', monospace;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+        
+        .presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--grid-bg);
+            background-image: 
+                linear-gradient(rgba(20, 20, 50, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 20, 50, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            overflow-y: auto;
+        }
+        
+        .slide.active {
+            transform: translateX(0);
+        }
+        
+        .slide-content {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(10, 10, 20, 0.8);
+            border-radius: 10px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+        
+        h1, h2, h3 {
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        .nav-button {
+            background: none;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background-color: var(--neon-blue);
+            transition: width 0.3s;
+            z-index: 100;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .component-item {
+            background-color: rgba(40, 40, 80, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .component-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+        
+        .component-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .component-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--neon-green);
+        }
+        
+        .component-desc {
+            font-size: 0.9rem;
+        }
+        
+        .recipe-example {
+            background-color: rgba(40, 40, 80, 0.7);
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 768px) {
+            .recipe-example {
+                flex-direction: row;
+            }
+        }
+        
+        .recipe-components {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        @media (min-width: 768px) {
+            .recipe-components {
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+        }
+        
+        .recipe-component {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(60, 60, 100, 0.7);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+        
+        .recipe-plus {
+            font-size: 1.5rem;
+            margin: 0 5px;
+            color: var(--neon-green);
+        }
+        
+        .recipe-arrow {
+            font-size: 2rem;
+            margin: 0 15px;
+            color: var(--neon-pink);
+        }
+        
+        @media (max-width: 767px) {
+            .recipe-arrow {
+                transform: rotate(90deg);
+                margin: 15px 0;
+            }
+        }
+        
+        .recipe-result {
+            background-color: rgba(80, 40, 80, 0.7);
+            border: 1px solid var(--neon-green);
+            border-radius: 5px;
+            padding: 15px;
+            flex-grow: 1;
+            text-align: left;
+        }
+        
+        .recipe-name {
+            font-weight: bold;
+            color: var(--neon-green);
+            margin-bottom: 5px;
+        }
+        
+        .stat-block {
+            display: flex;
+            margin-top: 10px;
+            gap: 15px;
+        }
+        
+        .stat {
+            background-color: rgba(20, 20, 40, 0.7);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        
+        .dice-roll {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            justify-content: center;
+        }
+        
+        .dice {
+            font-size: 2.5rem;
+            margin: 0 10px;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--neon-blue);
+            }
+            to {
+                text-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
+            }
+        }
+        
+        .roll-arrow {
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--neon-purple), transparent);
+            position: relative;
+            margin: 0 20px;
+        }
+        
+        .roll-arrow::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid var(--neon-purple);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        
+        .roll-result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .feature-box {
+            background-color: rgba(40, 40, 80, 0.7);
+            border: 1px solid var(--neon-orange);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .feature-title {
+            color: var(--neon-orange);
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .code-block {
+            background-color: rgba(20, 20, 40, 0.8);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: "Courier New", monospace;
+            text-align: left;
+            color: var(--neon-green);
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .step-list {
+            text-align: left;
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        
+        .step-list li {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 40px;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background-color: var(--neon-purple);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .quality-scale {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            padding: 0 20px;
+        }
+        
+        .quality-bar {
+            flex-grow: 1;
+            height: 30px;
+            background: linear-gradient(to right, #ff4500, var(--neon-green), var(--neon-blue));
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .quality-marker {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid white;
+            top: -20px;
+            transform: translateX(-50%);
+        }
+        
+        .quality-label {
+            position: absolute;
+            top: -45px;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        
+        .quality-marker-standard {
+            left: 20%;
+        }
+        
+        .quality-marker-good {
+            left: 50%;
+        }
+        
+        .quality-marker-exceptional {
+            left: 80%;
+        }
+        
+        .quality-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+            padding: 0 10px;
+        }
+        
+        .learning-objectives {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .objective {
+            background-color: rgba(40, 40, 80, 0.7);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .objective-title {
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .objective-desc {
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        
+        .check-list {
+            list-style: none;
+            padding-left: 10px;
+            text-align: left;
+        }
+        
+        .check-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .check-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        th {
+            background-color: rgba(60, 60, 100, 0.7);
+            color: var(--neon-blue);
+            padding: 10px;
+            border: 1px solid var(--neon-purple);
+        }
+        
+        td {
+            padding: 10px;
+            border: 1px solid var(--neon-purple);
+            background-color: rgba(40, 40, 80, 0.5);
+        }
+        
+        tr:hover td {
+            background-color: rgba(60, 60, 100, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="presentation-container" id="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide" id="slide1">
+            <div class="slide-content">
+                <h1>The Forge</h1>
+                <h2>CREATE System Tutorial</h2>
+                <p style="text-align: center; font-style: italic;">A guide to crafting in Neon D&D Isekai</p>
+                
+                <div style="margin: 40px 0; display: flex; justify-content: center; gap: 20px;">
+                    <div class="component-icon" style="font-size: 3rem;">🔥</div>
+                    <div class="component-icon" style="font-size: 3rem;">⚒️</div>
+                    <div class="component-icon" style="font-size: 3rem;">✨</div>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px;">
+                    Navigate using the buttons below or keyboard arrow keys.<br>
+                    Press Space to advance to the next slide.
+                </p>
+            </div>
+            <div class="slide-number">1/8</div>
+        </div>
+        
+        <!-- Slide 2: Introduction to The Forge -->
+        <div class="slide" id="slide2">
+            <div class="slide-content">
+                <h2>Introduction to The Forge</h2>
+                
+                <p>The Forge is the creative heart of Neon D&D Isekai - a magical crafting system where players combine components to create powerful items. Located in a workshop filled with neon tools and arcane machinery, it's where innovation and magic meet.</p>
+                
+                <div class="two-column">
+                    <div class="feature-box">
+                        <div class="feature-title">What is CREATE?</div>
+                        <p>CREATE is one of the four core systems in our game, focused on crafting, building, and designing. It represents creative problem-solving and the ability to make something new from existing components.</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">Why Crafting Matters</div>
+                        <p>Crafting allows players to create custom equipment, magical tools, and unique items that aren't available through other means. It rewards exploration (finding components) and encourages experimentation.</p>
+                    </div>
+                </div>
+                
+                <h3>Core Mechanics</h3>
+                <p>At its heart, The Forge operates on a simple principle: combine components, add magical essence, and roll to determine success. The specific combinations and your character's skills determine what you can create and how powerful it will be.</p>
+                
+                <div class="check-list">
+                    <li>Crafting uses the <strong>Create</strong> ability, based on Wisdom</li>
+                    <li>Players gather components from dungeons, monsters, and merchants</li>
+                    <li>Success is determined by a d20 roll against a Difficulty Class</li>
+                    <li>Better rolls produce higher quality items</li>
+                </div>
+            </div>
+            <div class="slide-number">2/8</div>
+        </div>
+        
+        <!-- Slide 3: Component Types -->
+        <div class="slide" id="slide3">
+            <div class="slide-content">
+                <h2>Component Types</h2>
+                
+                <p>The Forge uses five categories of components, each with distinct properties and effects. Mastering component combinations is key to successful crafting.</p>
+                
+                <div class="component-grid">
+                    <div class="component-item">
+                        <div class="component-icon">🔥</div>
+                        <div class="component-name">Elemental Essences</div>
+                        <div class="component-desc">Core energy sources that determine damage type and special effects</div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-icon">🔩</div>
+                        <div class="component-name">Metals & Base Materials</div>
+                        <div class="component-desc">Physical structure that determines item type and durability</div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-icon">💎</div>
+                        <div class="component-name">Catalysts</div>
+                        <div class="component-desc">Magical amplifiers that enhance and stabilize enchantments</div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-icon">🧪</div>
+                        <div class="component-name">Binding Agents</div>
+                        <div class="component-desc">Materials that fuse magic and matter, determining use duration</div>
+                    </div>
+                    
+                    <div class="component-item">
+                        <div class="component-icon">🔆</div>
+                        <div class="component-name">Runes & Enhancers</div>
+                        <div class="component-desc">Magical inscriptions that add special abilities or effects</div>
+                    </div>
+                </div>
+                
+                <h3>Example Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Category</th>
+                        <th>Effect</th>
+                        <th>Source</th>
+                    </tr>
+                    <tr>
+                        <td>Fire Essence</td>
+                        <td>Elemental</td>
+                        <td>Adds fire damage</td>
+                        <td>Fire creatures, volcanic areas</td>
+                    </tr>
+                    <tr>
+                        <td>Mithril Alloy</td>
+                        <td>Base Material</td>
+                        <td>High durability, lightweight</td>
+                        <td>Deep dungeons, master blacksmiths</td>
+                    </tr>
+                    <tr>
+                        <td>Mana Crystal</td>
+                        <td>Catalyst</td>
+                        <td>Amplifies magical effects</td>
+                        <td>Arcane locations, magic shops</td>
+                    </tr>
+                    <tr>
+                        <td>Monster Core</td>
+                        <td>Binding Agent</td>
+                        <td>Adds monster property to item</td>
+                        <td>Defeated monsters</td>
+                    </tr>
+                    <tr>
+                        <td>Damage Rune</td>
+                        <td>Enhancer</td>
+                        <td>Increases damage output</td>
+                        <td>Ancient ruins, spell scrolls</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">3/8</div>
+        </div>
+        
+        <!-- Slide 4: Crafting Process -->
+        <div class="slide" id="slide4">
+            <div class="slide-content">
+                <h2>The Crafting Process</h2>
+                
+                <p>Crafting an item follows a specific sequence of steps, from gathering components to determining the final quality.</p>
+                
+                <ol class="step-list">
+                    <li><strong>Component Selection</strong>: Choose up to three components to combine</li>
+                    <li><strong>Essence Expenditure</strong>: Spend Essence Points based on item complexity
+                        <ul>
+                            <li>Minor Items: 3 Essence</li>
+                            <li>Major Items: 5 Essence</li>
+                            <li>Legendary Items: 8 Essence</li>
+                        </ul>
+                    </li>
+                    <li><strong>Create Check</strong>: Roll d20 + Wisdom modifier + relevant bonuses</li>
+                    <li><strong>Quality Determination</strong>: Based on roll result vs the Difficulty Class (DC)
+                        <ul>
+                            <li>DC + 0-2: Standard quality</li>
+                            <li>DC + 3-5: Good quality</li>
+                            <li>DC + 6+: Exceptional quality</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <div class="dice-roll">
+                    <div class="dice">⚄</div>
+                    <div class="roll-arrow"></div>
+                    <div class="roll-result">16</div>
+                </div>
+                
+                <h3>Quality Scale</h3>
+                <div class="quality-scale">
+                    <div class="quality-bar">
+                        <div class="quality-marker quality-marker-standard">
+                            <span class="quality-label">Standard</span>
+                        </div>
+                        <div class="quality-marker quality-marker-good">
+                            <span class="quality-label">Good</span>
+                        </div>
+                        <div class="quality-marker quality-marker-exceptional">
+                            <span class="quality-label">Exceptional</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quality-labels">
+                    <span>DC+0</span>
+                    <span>DC+3</span>
+                    <span>DC+6</span>
+                </div>
+                
+                <p>Higher quality items have better stats, additional effects, or more uses before expiring. Exceptional quality items sometimes have unique properties not found in standard versions!</p>
+            </div>
+            <div class="slide-number">4/8</div>
+        </div>
+        
+        <!-- Slide 5: Recipe Examples -->
+        <div class="slide" id="slide5">
+            <div class="slide-content">
+                <h2>Recipe Examples</h2>
+                
+                <p>While experimentation is encouraged, certain known recipes consistently produce specific magical items. Here are some examples:</p>
+                
+                <div class="recipe-example">
+                    <div class="recipe-components">
+                        <div class="recipe-component">
+                            <div class="component-icon">🔩</div>
+                            <small>Iron Chunk</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">🔥</div>
+                            <small>Fire Essence</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">🔆</div>
+                            <small>Damage Rune</small>
+                        </div>
+                    </div>
+                    <div class="recipe-arrow">→</div>
+                    <div class="recipe-result">
+                        <div class="recipe-name">Flaming Sword</div>
+                        <div>A sword imbued with the power of fire, dealing additional fire damage with each strike.</div>
+                        <div class="stat-block">
+                            <div class="stat">Damage: 1d8</div>
+                            <div class="stat">Fire: +1d4</div>
+                            <div class="stat">DC: 12</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recipe-example">
+                    <div class="recipe-components">
+                        <div class="recipe-component">
+                            <div class="component-icon">🔩</div>
+                            <small>Mithril Alloy</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">❄️</div>
+                            <small>Frost Shard</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">💎</div>
+                            <small>Mana Crystal</small>
+                        </div>
+                    </div>
+                    <div class="recipe-arrow">→</div>
+                    <div class="recipe-result">
+                        <div class="recipe-name">Frost Staff</div>
+                        <div>A staff that channels the power of ice, freezing enemies and creating barriers of frost.</div>
+                        <div class="stat-block">
+                            <div class="stat">Damage: 1d6</div>
+                            <div class="stat">Effect: Slow</div>
+                            <div class="stat">DC: 15</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recipe-example">
+                    <div class="recipe-components">
+                        <div class="recipe-component">
+                            <div class="component-icon">🌿</div>
+                            <small>Glowing Herb</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">🔮</div>
+                            <small>Ethereal Gem</small>
+                        </div>
+                        <div class="recipe-plus">+</div>
+                        <div class="recipe-component">
+                            <div class="component-icon">✨</div>
+                            <small>Healing Rune</small>
+                        </div>
+                    </div>
+                    <div class="recipe-arrow">→</div>
+                    <div class="recipe-result">
+                        <div class="recipe-name">Healing Charm</div>
+                        <div>A magical charm that emanates healing energy, restoring health to the bearer and nearby allies.</div>
+                        <div class="stat-block">
+                            <div class="stat">Heal: 2d4 HP</div>
+                            <div class="stat">Uses: 3/day</div>
+                            <div class="stat">DC: 12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">5/8</div>
+        </div>
+        
+        <!-- Slide 6: Class Specifics -->
+        <div class="slide" id="slide6">
+            <div class="slide-content">
+                <h2>Class-Specific Abilities</h2>
+                
+                <p>Each class in Neon D&D Isekai has unique abilities that affect their crafting potential at The Forge:</p>
+                
+                <div class="two-column">
+                    <div>
+                        <h3>Warrior</h3>
+                        <ul>
+                            <li><strong>Weapon Expert</strong> - +2 bonus to crafting weapons</li>
+                            <li><strong>Armor Reinforcer</strong> - Can add durability to crafted armor</li>
+                            <li><strong>Combat Enhancer</strong> - Can create temporary combat buffs</li>
+                        </ul>
+                        
+                        <h3>Wizard</h3>
+                        <ul>
+                            <li><strong>Essence Efficiency</strong> - Crafting costs 1 less Essence Point</li>
+                            <li><strong>Arcane Infuser</strong> - Can add magical properties to mundane items</li>
+                            <li><strong>Formula Master</strong> - Advantage on experimental recipes</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>White Mage</h3>
+                        <ul>
+                            <li><strong>Healing Focus</strong> - Healing items 25% more effective</li>
+                            <li><strong>Blessing Infusion</strong> - Can add protective properties to items</li>
+                            <li><strong>Mass Production</strong> - Can create multiple minor items with one check</li>
+                        </ul>
+                        
+                        <h3>Wanderer</h3>
+                        <ul>
+                            <li><strong>Resource Scout</strong> - Can find rare components more easily</li>
+                            <li><strong>Improvisation</strong> - Can substitute similar components</li>
+                            <li><strong>Trap Maker</strong> - Can craft complex traps and alarm systems</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Crafting Mastery Progression</h3>
+                <p>As players create more items at The Forge, they gain crafting experience and unlock new abilities:</p>
+                
+                <table>
+                    <tr>
+                        <th>Mastery Level</th>
+                        <th>Requirement</th>
+                        <th>Benefits</th>
+                    </tr>
+                    <tr>
+                        <td>Apprentice</td>
+                        <td>0-5 successful crafts</td>
+                        <td>Basic recipes only</td>
+                    </tr>
+                    <tr>
+                        <td>Journeyman</td>
+                        <td>6-15 successful crafts</td>
+                        <td>Intermediate recipes, +1 to crafting checks</td>
+                    </tr>
+                    <tr>
+                        <td>Master</td>
+                        <td>16+ successful crafts</td>
+                        <td>Advanced recipes, can modify existing recipes</td>
+                    </tr>
+                    <tr>
+                        <td>Grandmaster</td>
+                        <td>3 exceptional items created</td>
+                        <td>Create custom recipes, +2 to crafting checks</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="slide-number">6/8</div>
+        </div>
+        
+        <!-- Slide 7: Technical Implementation -->
+        <div class="slide" id="slide7">
+            <div class="slide-content">
+                <h2>Technical Implementation</h2>
+                
+                <p>For developers implementing The Forge in our Neon D&D Isekai game, here's how the system works at a technical level:</p>
+                
+                <div class="code-block">
+<pre>
+# models/crafting.py
+
+def craft_item(components, character, roll):
+    """Craft an item from components based on character skills and dice roll."""
+    
+    # Check if components form a valid recipe
+    recipe = get_matching_recipe(components)
+    
+    if recipe:
+        # Calculate difficulty class
+        dc = recipe.difficulty
+        
+        # Apply class bonuses
+        if character.class_name == "Wizard" and any(c.type == "magical" for c in components):
+            roll += 2
+        elif character.class_name == "Warrior" and recipe.item_type == "weapon":
+            roll += 2
+        
+        # Determine success
+        if roll >= dc:
+            # Determine quality
+            if roll >= dc + 6:
+                quality = "exceptional"
+            elif roll >= dc + 3:
+                quality = "good"
+            else:
+                quality = "standard"
+                
+            # Create the item with appropriate stats
+            item = create_item_instance(recipe, quality)
+            return item, True, quality
+        else:
+            # Crafting failed
+            return None, False, None
+    else:
+        # No matching recipe - may still create something with experimentation
+        if roll >= 15:  # High roll might create something unexpected
+            return create_experimental_item(components, roll), True, "experimental"
+        else:
+            return None, False, None
+</pre>
+                </div>
+                
+                <h3>Core Components</h3>
+                <div class="two-column">
+                    <div class="feature-box">
+                        <div class="feature-title">Component System</div>
+                        <ul>
+                            <li>Components stored as objects with type, properties, and effects</li>
+                            <li>Recipe database matches component combinations to results</li>
+                            <li>Quality system scales item stats based on roll results</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">User Interface</div>
+                        <ul>
+                            <li>Drag-and-drop component selection</li>
+                            <li>Visual crafting animation with forge effects</li>
+                            <li>Item result display with stats and description</li>
+                            <li>Recipe book for discovered combinations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Integration with Game Systems</h3>
+                <p>The Forge connects with other game systems:</p>
+                <ul>
+                    <li><strong>Inventory System</strong> - Components consumed, items added</li>
+                    <li><strong>Character Progression</strong> - Crafting experience tracked</li>
+                    <li><strong>Quest System</strong> - Crafting can fulfill quest objectives</li>
+                    <li><strong>Combat System</strong> - Crafted items affect combat stats</li>
+                </ul>
+            </div>
+            <div class="slide-number">7/8</div>
+        </div>
+        
+        <!-- Slide 8: Educational Value -->
+        <div class="slide" id="slide8">
+            <div class="slide-content">
+                <h2>Educational Value</h2>
+                
+                <p>The CREATE system in Neon D&D Isekai isn't just fun gameplay—it's designed to teach valuable skills through engaging interaction:</p>
+                
+                <div class="learning-objectives">
+                    <div class="objective">
+                        <div class="objective-title">Creative Problem Solving</div>
+                        <div class="objective-desc">Players learn to think creatively about combining resources in novel ways to solve problems. Experimentation is rewarded, teaching iterative improvement.</div>
+                    </div>
+                    
+                    <div class="objective">
+                        <div class="objective-title">System Thinking</div>
+                        <div class="objective-desc">Understanding how components interact teaches systems thinking—seeing how different parts relate to create emergent properties in the final product.</div>
+                    </div>
+                    
+                    <div class="objective">
+                        <div class="objective-title">Resource Management</div>
+                        <div class="objective-desc">Players must make decisions about limited resources (components and essence), teaching prioritization and strategic thinking.</div>
+                    </div>
+                    
+                    <div class="objective">
+                        <div class="objective-title">Technical Knowledge</div>
+                        <div class="objective-desc">For developers, implementing The Forge teaches UI design, state management, and data relationship concepts in an engaging context.</div>
+                    </div>
+                </div>
+                
+                <h3>Classroom Applications</h3>
+                <div class="two-column">
+                    <div>
+                        <p>Teachers can use The Forge system to teach:</p>
+                        <ul>
+                            <li>Chemistry concepts (combining elements)</li>
+                            <li>Economics (resource value and scarcity)</li>
+                            <li>Probability (risk/reward of different rolls)</li>
+                            <li>Computer science (recipe algorithms)</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <p>Student projects can include:</p>
+                        <ul>
+                            <li>Designing new components and recipes</li>
+                            <li>Creating a crafting calculator app</li>
+                            <li>Balancing the crafting economy</li>
+                            <li>Expanding the system with new mechanics</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px; font-style: italic;">Remember: The most important thing is that this is FUN to play while learning!</p>
+            </div>
+            <div class="slide-number">8/8</div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-button" id="prevButton">Previous</button>
+        <button class="nav-button" id="nextButton">Next</button>
+    </div>
+    
+    <script>
+        // Presentation navigation logic
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.getElementById('progressBar');
+        let currentSlide = 0;
+        
+        // Initialize first slide
+        slides[0].classList.add('active');
+        updateProgressBar();
+        
+        // Event listeners for navigation
+        prevButton.addEventListener('click', showPreviousSlide);
+        nextButton.addEventListener('click', showNextSlide);
+        document.addEventListener('keydown', handleKeyPress);
+        
+        function showSlide(index) {
+            // Hide current slide
+            slides[currentSlide].classList.remove('active');
+            
+            // Update current slide index
+            currentSlide = index;
+            
+            // Show new current slide
+            slides[currentSlide].classList.add('active');
+            
+            // Update button states
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === totalSlides - 1;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+        
+        function showPreviousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        function showNextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'ArrowLeft') {
+                showPreviousSlide();
+            } else if (event.key === 'ArrowRight' || event.key === ' ') {
+                showNextSlide();
+            }
+        }
+        
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+    </script>
+</body>
+</html>
