@@ -10,10 +10,13 @@
 
 ## SPRINT 2 GOALS
 - [ ] Implement basic dungeon exploration (EXPLORE quadrant)
-- [ ] Create simple combat system using 3d6 mechanics
+  - [ ] Week 1: Core structure (DungeonLevel, Room, generation algorithm)
+  - [ ] Week 2: Room content and exploration interface
+  - [ ] Week 3: Combat system with 3d6 mechanics
+  - [ ] Week 4: Integration and polish
 - [ ] Add more crafted items and recipes to The Forge
 - [ ] Implement save/load functionality for game state
-- [ ] Create the Lore Halls (EXPLAIN) interface for NPC interactions
+- [ ] Create minimal version of Lore Halls (EXPLAIN) if time permits
 - [ ] Add tutorial and help system for new players
 
 ## MVP Status by Quadrant
@@ -42,11 +45,16 @@
 - [ ] Connect spell creation to character abilities
 
 ### EXPLORE (The Neon Wilderness) - NEXT PRIORITY
-- [ ] Design basic dungeon generation algorithm
-- [ ] Implement turn-based combat system
-- [ ] Create monster data structure
-- [ ] Design treasure/reward system
-- [ ] Implement basic dungeon navigation
+- [x] Design basic dungeon generation algorithm (adapted from MazeBuilder)
+- [x] Create detailed implementation plan with architecture design
+- [ ] Implement DungeonLevel and Room classes
+- [ ] Create BSP dungeon generation algorithm
+- [ ] Build dungeon visualization with neon theming
+- [ ] Implement exploration interface and movement system
+- [ ] Create monster generation system
+- [ ] Implement turn-based combat with 3d6 mechanics
+- [ ] Add treasure and reward system
+- [ ] Connect exploration to character progression
 
 ## Technical Tasks
 - [x] Set up proper state management using session_state
@@ -56,8 +64,12 @@
 - [x] Design data structures for game objects
 - [x] Create utility functions for common operations
 - [x] Set up basic test framework
-- [ ] Add automated testing for core gameplay mechanics
+- [x] Document core mechanics with complete technical specifications
+- [x] Create comprehensive development documentation
+- [ ] Add automated testing for EXPLORE gameplay mechanics
 - [ ] Implement data persistence (save/load)
+- [ ] Create visualization system for dungeon maps
+- [ ] Optimize for performance with larger dungeons
 
 ## Future Features
 - [ ] Advanced LLM integration for NPC interactions
