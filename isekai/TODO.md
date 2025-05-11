@@ -11,16 +11,16 @@
 - [ ] **Add comprehensive automated testing for all components**
 
 ## SPRINT 2 GOALS
-- [ ] Implement basic dungeon exploration (EXPLORE quadrant)
-  - [ ] Week 1: Core structure (DungeonLevel, Room, generation algorithm)
-  - [ ] Week 2: Room content and exploration interface
-  - [ ] Week 3: Combat system with 3d6 mechanics
+- [x] Implement basic dungeon exploration (EXPLORE quadrant)
+  - [x] Week 1: Core structure (DungeonLevel, Room, generation algorithm)
+  - [x] Week 2: Room content and exploration interface
+  - [x] Week 3: Combat system with 3d6 mechanics
   - [ ] Week 4: Integration and polish
 - [ ] **Apply strict separation of concerns to all new code:**
   - [ ] Isolate UI, game logic, and data layers
   - [ ] Apply MVC pattern to EXPLORE quadrant implementation
-- [ ] **Implement comprehensive automated testing:**
-  - [ ] Write unit tests alongside all new code (test-driven development)
+- [x] **Implement comprehensive automated testing:**
+  - [x] Write unit tests alongside all new code (test-driven development)
   - [ ] Add integration tests for critical gameplay loops
 - [ ] Add more crafted items and recipes to The Forge
 - [ ] Implement save/load functionality for game state
@@ -55,13 +55,13 @@
 ### EXPLORE (The Neon Wilderness) - NEXT PRIORITY
 - [x] Design basic dungeon generation algorithm (adapted from MazeBuilder)
 - [x] Create detailed implementation plan with architecture design
-- [ ] Implement DungeonLevel and Room classes
-- [ ] Create BSP dungeon generation algorithm
-- [ ] Build dungeon visualization with neon theming
-- [ ] Implement exploration interface and movement system
-- [ ] Create monster generation system
-- [ ] Implement turn-based combat with 3d6 mechanics
-- [ ] Add treasure and reward system
+- [x] Implement DungeonLevel and Room classes
+- [x] Create BSP dungeon generation algorithm
+- [x] Build dungeon visualization with neon theming
+- [x] Implement exploration interface and movement system
+- [x] Create monster generation system
+- [x] Implement turn-based combat with 3d6 mechanics
+- [x] Add treasure and reward system
 - [ ] Connect exploration to character progression
 
 ## Technical Tasks
