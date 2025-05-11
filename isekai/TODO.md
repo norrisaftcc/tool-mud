@@ -6,6 +6,7 @@
 - [x] Implement character creation skeleton
 - [x] Build prototype of The Forge (CREATE system)
 - [ ] **Plan MVP for each quadrant (CREATE, EXPLAIN, CODE, EXPLORE)**
+- [ ] **Convert core mechanic from d20 to bell curve (3d6 or 2d10) for more consistent outcomes**
 
 ## MVP Planning for Each Quadrant
 
