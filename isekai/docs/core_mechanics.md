@@ -1,9 +1,9 @@
 # Core Game Mechanics
 
 ## Dice Mechanic
-Traditional D&D uses a d20 for most checks, but our system will use a bell curve distribution for more consistent outcomes. We're considering two options:
+Traditional D&D uses a d20 for most checks, but our system uses a bell curve distribution for more consistent outcomes:
 
-### 3d6 System (Recommended)
+### 3d6 System (Implemented)
 - Roll 3 six-sided dice and sum the results (range: 3-18)
 - Target numbers scale from 9 (easy) to 18 (nearly impossible)
 - **Advantages:**
@@ -11,14 +11,13 @@ Traditional D&D uses a d20 for most checks, but our system will use a bell curve
   - Character skill matters more than lucky rolls
   - Familiar to players of GURPS and other systems
   - Simple to implement and understand
+  - Visually interesting with three dice rolling (⚀⚁⚂⚃⚄⚅)
 
-### 2d10 System (Alternative)
-- Roll 2 ten-sided dice and sum the results (range: 2-20)
-- Target numbers scale from 8 (easy) to 20 (nearly impossible)
-- **Advantages:**
-  - Slightly wider range than 3d6
-  - Still has bell curve properties
-  - Maps well to percentile chances
+### Difficulty Classes
+- DC 9: Easy (87.5% success rate)
+- DC 12: Moderate (62.5% success rate)
+- DC 15: Hard (16.2% success rate)
+- DC 18: Nearly Impossible (0.5% success rate)
 
 ## Attributes
 Characters have three primary attributes:
@@ -34,25 +33,38 @@ When a character attempts an action with uncertain outcome:
 - Roll dice (3d6) and add relevant attribute modifier
 - Compare to target number or opposing roll
 - Modifiers: (Attribute - 10) / 2, rounded down
+- Class affinities provide bonus modifiers for certain check types
 
 ## Character Classes
 Four archetypal classes, each with unique abilities:
 
-1. **Warrior**: Combat specialist with high STR
+1. **Warrior**: Combat specialist with high STR (+2 STR bonus)
    - Power Attack, Defend, Whirlwind (advanced)
    - HP Bonus: +2 per level
+   - Crafting Affinity: Weapons (uses STR for weapon crafting)
 
-2. **Wizard**: Arcane spellcaster with high WIS
+2. **Wizard**: Arcane spellcaster with high WIS (+2 WIS bonus)
    - Arcane Missile, Shield, Fireball (advanced)
    - MP Bonus: +2 per level
+   - Crafting Affinity: Staves and magical items (uses WIS for enchantments)
 
-3. **White Mage**: Healing specialist with balanced attributes
+3. **White Mage**: Healing specialist with balanced attributes (+1 STR, +1 WIS)
    - Heal, Bless, Mass Heal (advanced)
    - HP/MP Bonus: +1 each per level
+   - Crafting Affinity: Healing items (uses WIS for restorative items)
 
-4. **Wanderer**: Versatile adventurer with high DEX
+4. **Wanderer**: Versatile adventurer with high DEX (+2 DEX bonus)
    - Quick Shot, Evade, Sneak Attack (advanced)
    - HP/MP Bonus: +1 each per level
+   - Crafting Affinity: Accessories (natural talent for crafting with DEX bonus)
+
+## Character Origins
+Each character has an origin story for how they were transported to the game world:
+- Suspicious Website Download
+- Arcade Cabinet Malfunction
+- VR Headset Glitch
+- Old Gaming Magazine Ritual
+- Lightning Strike While Gaming
 
 ## Combat System
 Turn-based combat with initiative:
@@ -68,7 +80,7 @@ Turn-based combat with initiative:
 3. **Damage**: Determined by weapon/spell plus attribute modifier
    - Physical damage: Based on STR modifier
    - Spell damage: Based on WIS modifier
-   
+
 4. **Defense**: 10 + DEX modifier + armor
 
 ## Leveling System
@@ -82,12 +94,17 @@ Turn-based combat with initiative:
 ## Crafting System (The Forge)
 - Components have types (metal, elemental, catalyst, rune, binding)
 - Recipes require specific component combinations
-- Crafting check: 3d6 + (STR or DEX modifier)
+- Crafting check: 3d6 + appropriate modifier
+  - Weapons: STR modifier (Warriors get bonus)
+  - Magic Items: WIS modifier (Wizards get bonus)
+  - Healing Items: WIS modifier (White Mages get bonus)
+  - Accessories: DEX modifier (Wanderers get bonus)
+- Class affinity: +2 bonus when crafting items designed for your class
 - Quality determined by check result:
-  - 9-12: Functional
-  - 13-15: Good
-  - 16-17: Great
-  - 18+: Excellent
+  - 10-14: Good (Quality Value 1)
+  - 15-17: Great (Quality Value 2)
+  - 18+: Excellent (Quality Value 3)
+- Starting item: New characters can craft one special item to begin with
 
 ## Magic System (The Arcane Matrix)
 - Spells constructed from code-like components
