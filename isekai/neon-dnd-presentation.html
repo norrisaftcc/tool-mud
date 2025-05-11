@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon D&D Isekai: Retro Realm Reboot</title>
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-purple: #9900ff;
+            --neon-green: #00ff00;
+            --dark-bg: #0a0a15;
+            --grid-bg: #080815;
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Courier New', monospace;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow: hidden;
+        }
+        
+        .presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--grid-bg);
+            background-image: 
+                linear-gradient(rgba(20, 20, 50, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(20, 20, 50, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            overflow-y: auto;
+        }
+        
+        .slide.active {
+            transform: translateX(0);
+        }
+        
+        .slide-content {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(10, 10, 20, 0.8);
+            border-radius: 10px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+        
+        h1, h2, h3 {
+            margin-top: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        .nav-button {
+            background: none;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .dice {
+            font-size: 2rem;
+            margin: 10px;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            }
+            to {
+                text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
+            }
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .team-member {
+            background-color: rgba(20, 20, 40, 0.7);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+        }
+        
+        .team-member h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .team-member p {
+            font-size: 0.95rem;
+        }
+        
+        .game-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            background-color: rgba(20, 20, 40, 0.7);
+            border: 1px solid var(--neon-pink);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+        
+        .feature h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+        
+        .feature p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background-color: var(--neon-blue);
+            transition: width 0.3s;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="presentation-container" id="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide" id="slide1">
+            <div class="slide-content">
+                <h1>Neon D&D Isekai</h1>
+                <h2>Retro Realm Reboot</h2>
+                <div style="display: flex; justify-content: center; margin: 30px 0;">
+                    <span class="dice">⚀</span>
+                    <span class="dice">⚁</span>
+                    <span class="dice">⚂</span>
+                    <span class="dice">⚃</span>
+                    <span class="dice">⚄</span>
+                    <span class="dice">⚅</span>
+                </div>
+                <p>A Game Jam Project Blending 1980s D&D Nostalgia with Isekai Anime Tropes and Neon Aesthetics</p>
+                <p style="font-style: italic; margin-top: 30px;">Scroll down or use navigation buttons to proceed</p>
+            </div>
+            <div class="slide-number">1/6</div>
+        </div>
+        
+        <!-- Slide 2: Project Overview -->
+        <div class="slide" id="slide2">
+            <div class="slide-content">
+                <h2>Project Overview</h2>
+                <p>Welcome to <strong>Neon D&D Isekai: Retro Realm Reboot</strong>, a text-based RPG experience that combines the nostalgic mechanics of 1980s Dungeons & Dragons with vibrant synthwave aesthetics and modern isekai anime tropes.</p>
+                <p>Players find themselves suddenly transported into a bizarre hybrid world where dungeon crawls are illuminated by neon lights, dragons breathe laser beams, and magic scrolls glow with digital text.</p>
+                <p>This project serves as both an entertaining adventure and a scaffolding for learning game development fundamentals, with its main gameplay areas mapping directly to educational objectives in creating, explaining, coding, and exploring.</p>
+                <p>Our game maintains the simplicity of classic D&D rules—featuring the core attributes of Strength, Dexterity, and Wisdom—while adding a fresh isekai twist with modern game design principles.</p>
+            </div>
+            <div class="slide-number">2/6</div>
+        </div>
+        
+        <!-- Slide 3: Meet the Team -->
+        <div class="slide" id="slide3">
+            <div class="slide-content">
+                <h2>Meet The Team</h2>
+                <p>Our dedicated team brings together diverse expertise to create this unique gaming experience</p>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h3>The GM</h3>
+                        <p><strong>Role:</strong> Project Lead & Game Designer</p>
+                        <p><strong>Expertise:</strong> D&D nostalgia, RPG systems, educational gamification</p>
+                        <p><strong>Contribution:</strong> Core concept, game mechanics, and project direction</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h3>Teacherbot.help Claude</h3>
+                        <p><strong>Role:</strong> Systems Designer & Content Developer</p>
+                        <p><strong>Expertise:</strong> Educational frameworks, content generation, documentation</p>
+                        <p><strong>Contribution:</strong> Game documentation, educational alignment, system balancing</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <h3>Kai Chen (Circuit)</h3>
+                        <p><strong>Role:</strong> Visual Designer & Technical Lead</p>
+                        <p><strong>Expertise:</strong> Neon aesthetics, interface design, technical implementation</p>
+                        <p><strong>Contribution:</strong> Visual identity, user experience, implementation support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">3/6</div>
+        </div>
+        
+        <!-- Slide 4: Core Game Features -->
+        <div class="slide" id="slide4">
+            <div class="slide-content">
+                <h2>Core Game Features</h2>
+                
+                <div class="game-features">
+                    <div class="feature">
+                        <h3>Classic D&D Simplicity</h3>
+                        <p>Simple attribute system with Strength, Dexterity, and Wisdom as primary stats, using d20-based checks</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>Four Nostalgic Classes</h3>
+                        <p>Warrior, Wizard, White Mage, and Wanderer classes, each with unique abilities and playstyles</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>Isekai Origins</h3>
+                        <p>Multiple "how you got transported" backstories affecting starting abilities and special powers</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>Neon-Drenched World</h3>
+                        <p>Four distinct regions combining D&D dungeon aesthetics with vibrant synthwave visuals</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>Educational Framework</h3>
+                        <p>Each area maps to learning objectives: Create, Explain, Code, and Explore</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>Retro Combat System</h3>
+                        <p>Turn-based combat using classic D&D mechanics enhanced with neon-themed abilities</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">4/6</div>
+        </div>
+        
+        <!-- Slide 5: Educational Framework -->
+        <div class="slide" id="slide5">
+            <div class="slide-content">
+                <h2>Educational Framework</h2>
+                <p>Each area of our game corresponds to a specific learning objective:</p>
+                
+                <div class="game-features">
+                    <div class="feature">
+                        <h3>CREATE</h3>
+                        <p><strong>Game Area:</strong> The Craft Nexus</p>
+                        <p><strong>Skills Developed:</strong> Creative problem-solving, asset generation, design thinking</p>
+                        <p><strong>Game Function:</strong> Crafting items, spell creation, environmental manipulation</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>EXPLAIN</h3>
+                        <p><strong>Game Area:</strong> The Lore Halls</p>
+                        <p><strong>Skills Developed:</strong> Documentation, communication, knowledge representation</p>
+                        <p><strong>Game Function:</strong> Information gathering, lore checks, NPC interaction</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>CODE</h3>
+                        <p><strong>Game Area:</strong> The Arcane Matrix</p>
+                        <p><strong>Skills Developed:</strong> Logic implementation, algorithmic thinking, debugging</p>
+                        <p><strong>Game Function:</strong> Spell modification, trap disarming, puzzle solving</p>
+                    </div>
+                    
+                    <div class="feature">
+                        <h3>EXPLORE</h3>
+                        <p><strong>Game Area:</strong> The Neon Wilderness</p>
+                        <p><strong>Skills Developed:</strong> Research methodology, data collection, discovery</p>
+                        <p><strong>Game Function:</strong> Dungeon navigation, secret finding, resource gathering</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">5/6</div>
+        </div>
+        
+        <!-- Slide 6: Project Timeline -->
+        <div class="slide" id="slide6">
+            <div class="slide-content">
+                <h2>Project Timeline</h2>
+                <p>Our development roadmap consists of four key phases:</p>
+                
+                <div style="text-align: left; margin-top: 20px;">
+                    <h3>Phase 1: Core Rules</h3>
+                    <p>Implementing the attribute system, class definitions, basic combat mechanics, and character creation process</p>
+                    
+                    <h3>Phase 2: World Building</h3>
+                    <p>Developing the four main areas (CREATE, EXPLAIN, CODE, EXPLORE) with their unique challenges and rewards</p>
+                    
+                    <h3>Phase 3: Adventure Creation</h3>
+                    <p>Creating sample adventures, developing NPCs, implementing the quest system, and balancing rewards</p>
+                    
+                    <h3>Phase 4: Educational Alignment</h3>
+                    <p>Mapping learning objectives, developing exercises, integrating assessment tools, and finalizing documentation</p>
+                </div>
+                
+                <p style="margin-top: 30px; font-style: italic;">Join us on this exciting journey to blend nostalgic gaming with modern educational frameworks!</p>
+            </div>
+            <div class="slide-number">6/7</div>
+        </div>
+        
+        <!-- Slide 7: Technical Next Steps -->
+        <div class="slide" id="slide7">
+            <div class="slide-content">
+                <h2>Technical Next Steps</h2>
+                <p style="text-align: left; font-style: italic; color: var(--neon-green);">Technical insights and priorities from Kai "Circuit" Chen:</p>
+                
+                <div style="text-align: left; margin-top: 15px;">
+                    <h3>Priority Developments</h3>
+                    
+                    <div class="game-features" style="margin-top: 15px;">
+                        <div class="feature">
+                            <h3>CODE System Implementation</h3>
+                            <p>Building a mini-programming system where players create "spells" using simplified pseudocode with drag-and-drop interfaces and LLM evaluation of player solutions</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>Digital Character Sheet</h3>
+                            <p>Interactive web-based character sheet with automatic stat calculations and cloud saving functionality for campaign persistence</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>NPC Interaction Engine</h3>
+                            <p>LLM-powered NPCs with constrained personalities and a sentiment/relationship tracker that evolves through conversation</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>Visual Design System</h3>
+                            <p>Custom pixel art blending 80s aesthetics with modern neon, animations for effects like "glitching," and high-contrast color palette</p>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Technical Implementation</h3>
+                    <p>Using vanilla JavaScript/HTML/CSS for accessibility, implementing local storage for game state, creating a unified design system, and setting up a collaborative GitHub repository</p>
+                    
+                    <p style="margin-top: 15px;">Building on The Forge proof-of-concept with more dynamic content generation—potentially using LLMs to create unique item descriptions and effects based on component combinations</p>
+                </div>
+            </div>
+            <div class="slide-number">7/7</div>
+        </div>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-button" id="prevButton">Previous</button>
+        <button class="nav-button" id="nextButton">Next</button>
+    </div>
+    
+    <script>
+        // Presentation navigation logic
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressBar = document.getElementById('progressBar');
+        let currentSlide = 0;
+        
+        // Update slide numbers to reflect new total
+        document.querySelectorAll('.slide-number').forEach((el, index) => {
+            el.textContent = `${index + 1}/${totalSlides}`;
+        });
+        
+        // Initialize first slide
+        slides[0].classList.add('active');
+        updateProgressBar();
+        
+        // Event listeners for navigation
+        prevButton.addEventListener('click', showPreviousSlide);
+        nextButton.addEventListener('click', showNextSlide);
+        document.addEventListener('keydown', handleKeyPress);
+        
+        function showSlide(index) {
+            // Hide current slide
+            slides[currentSlide].classList.remove('active');
+            
+            // Update current slide index
+            currentSlide = index;
+            
+            // Show new current slide
+            slides[currentSlide].classList.add('active');
+            
+            // Update button states
+            prevButton.disabled = currentSlide === 0;
+            nextButton.disabled = currentSlide === totalSlides - 1;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+        
+        function showPreviousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        function showNextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'ArrowLeft') {
+                showPreviousSlide();
+            } else if (event.key === 'ArrowRight') {
+                showNextSlide();
+            }
+        }
+        
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Add wheel event listener for scrolling behavior
+        document.addEventListener('wheel', function(event) {
+            if (event.deltaY > 0) {
+                showNextSlide();
+            } else {
+                showPreviousSlide();
+            }
+        });
+    </script>
+</body>
+</html>
