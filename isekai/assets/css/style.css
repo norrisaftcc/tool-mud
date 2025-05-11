@@ -1,0 +1,141 @@
+/* Neon D&D Isekai - Main CSS */
+
+/* Custom colors */
+:root {
+    --neon-pink: #ff00ff;
+    --neon-blue: #00ffff;
+    --neon-purple: #9900ff;
+    --neon-green: #00ff00;
+    --dark-bg: #0a0a15;
+    --grid-bg: #080815;
+}
+
+/* Global styles */
+body {
+    background-color: var(--dark-bg);
+    background-image: 
+        linear-gradient(rgba(20, 20, 50, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 20, 50, 0.3) 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: 'Courier New', monospace;
+    color: white;
+}
+
+/* Custom header styles */
+h1 {
+    background: linear-gradient(to right, var(--neon-pink), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+h2 {
+    color: var(--neon-blue);
+    text-shadow: 0 0 5px var(--neon-blue);
+}
+
+h3 {
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green);
+}
+
+/* Custom button styles */
+.stButton > button {
+    border: 2px solid var(--neon-blue);
+    background-color: transparent;
+    color: var(--neon-blue);
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: var(--neon-blue);
+    color: var(--dark-bg);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Primary buttons with pink color */
+.stButton button[data-baseweb="button"][kind="primary"] {
+    border-color: var(--neon-pink);
+    background-color: transparent;
+    color: var(--neon-pink);
+}
+
+.stButton button[data-baseweb="button"][kind="primary"]:hover {
+    background-color: var(--neon-pink);
+    color: var(--dark-bg);
+    box-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* Custom card styles */
+.card {
+    background-color: rgba(20, 20, 40, 0.7);
+    border: 1px solid var(--neon-purple);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 0 10px rgba(153, 0, 255, 0.3);
+}
+
+/* Custom progress bar */
+.stProgress > div > div {
+    background-color: var(--neon-green);
+}
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background-color: rgba(15, 15, 30, 0.8);
+    border-right: 1px solid var(--neon-purple);
+}
+
+/* Custom selectbox */
+.stSelectbox {
+    border: 1px solid var(--neon-blue);
+}
+
+/* Dice styles */
+.dice {
+    font-size: 2rem;
+    margin: 5px;
+    text-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Component container styles */
+.component-container {
+    background-color: rgba(20, 20, 40, 0.6);
+    border: 1px solid var(--neon-purple);
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+/* Character sheet specific styles */
+.attribute-dot {
+    color: var(--neon-blue);
+    font-size: 14px;
+    margin-right: 2px;
+}
+
+/* Item card styling */
+.item-card {
+    background-color: rgba(30, 30, 50, 0.7);
+    border: 1px solid var(--neon-green);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    transition: transform 0.2s;
+}
+
+.item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+}
+
+/* Combat log styling */
+.combat-log {
+    font-family: 'Courier New', monospace;
+    background-color: rgba(10, 10, 20, 0.8);
+    padding: 10px;
+    border-left: 3px solid var(--neon-blue);
+    height: 200px;
+    overflow-y: auto;
+}
