@@ -1,8 +1,12 @@
 """
 Dice rolling utilities for Neon D&D Isekai
+
+Provides functions for dice rolls, attribute checks, and combat calculations using
+the 3d6 system that replaces the traditional d20 for more consistent outcomes.
 """
 import random
 import time
+from typing import List, Dict, Any, Tuple, Union
 import streamlit as st
 
 def roll_die(sides=6):
@@ -208,6 +212,111 @@ def streamlit_dice_roller():
                 result_container.markdown(f"""
                 **Total:** {total} ({' + '.join([str(r) for r in roll['results']])})
                 """)
+
+# Additional functions for combat system
+def calculate_damage(attack: int, defense: int) -> int:
+    """Calculate damage for a combat attack
+
+    Args:
+        attack: The attacker's attack rating
+        defense: The defender's defense rating
+
+    Returns:
+        Amount of damage dealt
+    """
+    # Base damage is half of attack rating
+    base_damage = attack // 2
+
+    # Random component
+    variance = random.randint(1, 6)
+
+    # Calculate total (minimum 1)
+    total_damage = max(1, base_damage + variance)
+
+    return total_damage
+def roll_3d6() -> int:
+    """Roll three six-sided dice and sum the results
+
+    This is the core mechanic for the game, replacing the traditional d20 with a
+    3d6 bell curve for more consistent outcomes.
+
+    Returns:
+        Sum of three d6 rolls (range 3-18)
+    """
+    return roll_die() + roll_die() + roll_die()
+
+def check_success(roll: int, difficulty: int) -> bool:
+    """Check if a roll is successful against a difficulty
+
+    Args:
+        roll: The dice roll result
+        difficulty: The target number to meet or exceed
+
+    Returns:
+        True if roll >= difficulty, False otherwise
+    """
+    return roll >= difficulty
+
+def combat_attribute_check(attribute_value: int, difficulty: int = 10) -> Tuple[bool, int]:
+    """Make an attribute check for combat using 3d6
+
+    The difficulty defaults to 10, which is considered an average check.
+
+    Args:
+        attribute_value: The attribute value (typically 3-18)
+        difficulty: The target difficulty (default: 10)
+
+    Returns:
+        Tuple containing (success, roll)
+    """
+    roll = roll_3d6()
+
+    # Calculate modifier based on attribute
+    modifier = (attribute_value // 2) - 5  # Similar to d20 system but scaled
+
+    # Apply modifier to roll
+    modified_roll = roll + modifier
+
+    # Check success
+    success = check_success(modified_roll, difficulty)
+
+    return (success, roll)
+
+def contested_check(attacker_attr: int, defender_attr: int) -> Tuple[bool, int, int]:
+    """Perform a contested check between two entities
+
+    Args:
+        attacker_attr: The attacker's attribute value
+        defender_attr: The defender's attribute value
+
+    Returns:
+        Tuple containing (attacker_wins, attacker_roll, defender_roll)
+    """
+    attacker_roll = roll_3d6() + ((attacker_attr // 2) - 5)
+    defender_roll = roll_3d6() + ((defender_attr // 2) - 5)
+
+    return (attacker_roll >= defender_roll, attacker_roll, defender_roll)
+
+def calculate_damage(attack: int, defense: int) -> int:
+    """Calculate damage for a combat attack
+
+    Args:
+        attack: The attacker's attack rating
+        defense: The defender's defense rating
+
+    Returns:
+        Amount of damage dealt
+    """
+    # Base damage is half of attack rating
+    base_damage = attack // 2
+
+    # Random component
+    variance = random.randint(1, 6)
+
+    # Calculate total (minimum 1)
+    total_damage = max(1, base_damage + variance)
+
+    return total_damage
 
 if __name__ == "__main__":
     # For testing as standalone

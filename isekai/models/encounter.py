@@ -52,11 +52,14 @@ class Monster:
         # Set derived stats
         self.max_hp = 5 + (level * 3) + (self.attributes['strength'] // 2)
         self.hp = self.max_hp
-        
+
         # Attack and defense derived from attributes and level
         self.attack = level + (self.attributes['strength'] // 2)
         self.defense = 10 + (self.attributes['dexterity'] // 2)
-        
+
+        # Status effects
+        self.status_effects = []
+
         # Special abilities
         self.abilities = abilities or self._generate_abilities()
         
