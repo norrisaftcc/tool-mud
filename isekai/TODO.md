@@ -5,56 +5,59 @@
 - [x] Create initial Streamlit app scaffolding
 - [x] Implement character creation skeleton
 - [x] Build prototype of The Forge (CREATE system)
-- [ ] **Plan MVP for each quadrant (CREATE, EXPLAIN, CODE, EXPLORE)**
-- [ ] **Convert core mechanic from d20 to bell curve (3d6 or 2d10) for more consistent outcomes**
+- [x] **Convert core mechanic from d20 to bell curve (3d6) for more consistent outcomes**
+- [x] **Plan MVP for each quadrant (CREATE, EXPLAIN, CODE, EXPLORE)**
 
-## MVP Planning for Each Quadrant
+## SPRINT 2 GOALS
+- [ ] Implement basic dungeon exploration (EXPLORE quadrant)
+- [ ] Create simple combat system using 3d6 mechanics
+- [ ] Add more crafted items and recipes to The Forge
+- [ ] Implement save/load functionality for game state
+- [ ] Create the Lore Halls (EXPLAIN) interface for NPC interactions
+- [ ] Add tutorial and help system for new players
 
-### CREATE (The Forge)
-- [ ] Define core crafting mechanics 
-- [ ] Create component/recipe data structure
-- [ ] Implement basic item generation logic
-- [ ] Connect crafting to character inventory
-- [ ] Design simple crafting UI
+## MVP Status by Quadrant
 
-### EXPLAIN (The Lore Halls)
+### CREATE (The Forge) - IMPLEMENTED
+- [x] Define core crafting mechanics 
+- [x] Create component/recipe data structure
+- [x] Implement basic item generation logic
+- [x] Connect crafting to character inventory
+- [x] Design simple crafting UI
+- [x] Add starting item system for roguelike runs
+- [x] Implement class affinities for items
+
+### EXPLAIN (The Lore Halls) - PLANNED
 - [ ] Define NPC interaction model
 - [ ] Create basic conversation system
 - [ ] Design knowledge collection mechanics
 - [ ] Implement basic lore database
 - [ ] Create LLM prompt templates for NPC responses
 
-### CODE (The Arcane Matrix)
+### CODE (The Arcane Matrix) - PLANNED
 - [ ] Design simplified pseudocode system for spells
 - [ ] Create drag-and-drop interface for spell components
 - [ ] Implement spell validation logic
 - [ ] Define core spell effects
 - [ ] Connect spell creation to character abilities
 
-### EXPLORE (The Neon Wilderness)
+### EXPLORE (The Neon Wilderness) - NEXT PRIORITY
 - [ ] Design basic dungeon generation algorithm
 - [ ] Implement turn-based combat system
 - [ ] Create monster data structure
 - [ ] Design treasure/reward system
 - [ ] Implement basic dungeon navigation
 
-## Sprint 2 Candidates
-- [ ] Implement player state persistence (save/load)
-- [ ] Complete The Forge MVP implementation
-- [ ] Begin work on character progression system
-- [ ] Design and implement basic combat mechanics
-- [ ] Create initial set of craftable items and recipes
-- [ ] Build simple dungeon exploration interface
-- [ ] Implement dice rolling for skill checks and combat
-
 ## Technical Tasks
-- [ ] Set up proper state management using session_state
-- [ ] Create character data model
-- [ ] Build component library for reusable UI elements
-- [ ] Implement inventory system
-- [ ] Design data structures for game objects
-- [ ] Create utility functions for common operations
-- [ ] Set up basic test framework
+- [x] Set up proper state management using session_state
+- [x] Create character data model
+- [x] Build component library for reusable UI elements
+- [x] Implement inventory system
+- [x] Design data structures for game objects
+- [x] Create utility functions for common operations
+- [x] Set up basic test framework
+- [ ] Add automated testing for core gameplay mechanics
+- [ ] Implement data persistence (save/load)
 
 ## Future Features
 - [ ] Advanced LLM integration for NPC interactions
