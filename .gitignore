@@ -1,3 +1,5 @@
 **/.claude/settings.local.json
 .DS_Store
 /mudvenv
+*.pyc
+/research/mazebuilder_py
