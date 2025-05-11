@@ -10,21 +10,26 @@
 - [ ] **Implement strict separation of concerns (UI, game logic, data layers)**
 - [ ] **Add comprehensive automated testing for all components**
 
-## SPRINT 2 GOALS
+## SPRINT 2 GOALS (COMPLETED)
 - [x] Implement basic dungeon exploration (EXPLORE quadrant)
   - [x] Week 1: Core structure (DungeonLevel, Room, generation algorithm)
   - [x] Week 2: Room content and exploration interface
   - [x] Week 3: Combat system with 3d6 mechanics
-  - [ ] Week 4: Integration and polish
-- [ ] **Apply strict separation of concerns to all new code:**
-  - [ ] Isolate UI, game logic, and data layers
-  - [ ] Apply MVC pattern to EXPLORE quadrant implementation
+  - [x] Week 4: Integration and polish
+- [x] **Apply strict separation of concerns to all new code:**
+  - [x] Isolate UI, game logic, and data layers
+  - [x] Apply MVC pattern to EXPLORE quadrant implementation
 - [x] **Implement comprehensive automated testing:**
   - [x] Write unit tests alongside all new code (test-driven development)
-  - [ ] Add integration tests for critical gameplay loops
-- [ ] Add more crafted items and recipes to The Forge
+  - [x] Add integration tests for critical gameplay loops
+
+## SPRINT 3 GOALS (CURRENT)
+- [ ] Implement Lore Halls (EXPLAIN quadrant)
+  - [ ] Week 1: NPC interaction system and knowledge data models
+  - [ ] Week 2: Conversation UI and knowledge journal interface
+  - [ ] Week 3: Template response system and integration with other quadrants
 - [ ] Implement save/load functionality for game state
-- [ ] Create minimal version of Lore Halls (EXPLAIN) if time permits
+- [ ] Add more crafted items and recipes to The Forge
 - [ ] Add tutorial and help system for new players
 
 ## MVP Status by Quadrant
@@ -38,12 +43,14 @@
 - [x] Add starting item system for roguelike runs
 - [x] Implement class affinities for items
 
-### EXPLAIN (The Lore Halls) - PLANNED
-- [ ] Define NPC interaction model
-- [ ] Create basic conversation system
-- [ ] Design knowledge collection mechanics
+### EXPLAIN (The Lore Halls) - NEXT PRIORITY
+- [x] Define NPC interaction model
+- [x] Create basic conversation system
+- [x] Design knowledge collection mechanics
 - [ ] Implement basic lore database
-- [ ] Create LLM prompt templates for NPC responses
+- [ ] Create template system for NPC responses
+- [ ] Build knowledge journal interface
+- [ ] Connect knowledge to gameplay benefits
 
 ### CODE (The Arcane Matrix) - PLANNED
 - [ ] Design simplified pseudocode system for spells
